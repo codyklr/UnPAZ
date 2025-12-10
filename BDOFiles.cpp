@@ -56,6 +56,7 @@ uint32_t BDOFile::ExtractFileMask(std::string sFileMask, fs::path OutputPath)
 	uint32_t counter = 0;
 	bool bProgress = false;
 	bool bIsQuiet = bQuiet;
+	const bool maskHasPathSeparator = sFileMask.find('/') != std::string::npos || sFileMask.find('\\') != std::string::npos;
 
 	this->bOverwriteFiles = this->GetYesToAll();
 	this->bCreatePath = this->GetYesToAll();
@@ -103,7 +104,7 @@ uint32_t BDOFile::ExtractFileMask(std::string sFileMask, fs::path OutputPath)
 	fs::current_path(OutputPath);
 
 	for (it = this->vFilesTable.begin(); it != this->vFilesTable.end(); ++it) {
-		if (WildMatch(sFileMask, it->sFilePath)) {
+		if (WildMatch(sFileMask, it->sFilePath) || (!maskHasPathSeparator && WildMatch(sFileMask, it->sFileName))) {
 			fs::path FilePath = OutputPath;
 
 			if (this->GetNoFolders()) {
@@ -155,13 +156,14 @@ uint32_t BDOFile::ListFileMask(std::string sFileMask)
 	uint32_t counter = 0;
 	bool bProgress = false;
 	bool bIsQuiet = bQuiet;
+	const bool maskHasPathSeparator = sFileMask.find('/') != std::string::npos || sFileMask.find('\\') != std::string::npos;
 
 	if (sFileMask.empty()) { ///turn off progressbar when listing all files
 		this->SetQuiet(true);
 	}
 
 	for (it = this->vFilesTable.begin(); it != this->vFilesTable.end(); ++it) {
-		if (WildMatch(sFileMask, it->sFilePath)) {
+		if (WildMatch(sFileMask, it->sFilePath) || (!maskHasPathSeparator && WildMatch(sFileMask, it->sFileName))) {
 			if (bProgress) {
 				printProgress(); ///delete current line (progress bar)
 				bProgress = false;

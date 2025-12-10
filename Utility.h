@@ -6,6 +6,7 @@
 #include <memory>
 #include <cstdio>
 #include <time.h>
+#include <cstdint>
 
 
 ///printf formatting for std::string

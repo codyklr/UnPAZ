@@ -27,6 +27,8 @@ bool WildMatch(std::string sPattern, std::string sString) //ANSI version
 
 loopStart:
 	for (iS = iStr, iP = iPat; iS != sString.end(); ++iS, ++iP) {
+		if (iP == sPattern.end()) goto asterixCheck; ///pattern is exhausted
+
 		switch (*iP) {
 		case '?':
 			if (*iS == '.')
@@ -69,6 +71,8 @@ bool WildMatch(std::wstring wsPattern, std::wstring wsString) //UNICODE (wide st
 
 loopStart:
 	for (iS = iStr, iP = iPat; iS != wsString.end(); ++iS, ++iP) {
+		if (iP == wsPattern.end()) goto asterixCheck; ///pattern is exhausted
+
 		switch (*iP) {
 		case L'?':
 			if (*iS == L'.')
